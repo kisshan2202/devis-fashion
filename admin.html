@@ -35,12 +35,12 @@
         <h2 id="gh-title">Connect GitHub to publish</h2>
         <p>Do this once on each phone or computer you use. The key is saved only on this device.</p>
         <ol class="gh-steps">
-          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub's new fine-grained token page</a> (sign in if asked).</li>
-          <li>Name it <em>Devi's Fashion admin</em> and pick an expiry date, for example one year.</li>
+          <li>In Chrome, sign in at <a href="https://github.com/login" target="_blank" rel="noopener">github.com</a>. The GitHub app can't make access keys, so use the browser.</li>
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new?name=Devi%27s+Fashion+admin&amp;description=Publish+photos+from+the+Devi%27s+Fashion+admin+page&amp;target_name=kisshan2202&amp;expires_in=366&amp;contents=write" target="_blank" rel="noopener">this ready-filled access key page</a>. The name, expiry and permission are already set.</li>
           <li>Under <strong>Repository access</strong>, choose <strong>Only select repositories</strong> and pick <strong>date-guru</strong>.</li>
-          <li>Under <strong>Permissions</strong>, add <strong>Contents</strong> and set it to <strong>Read and write</strong>.</li>
-          <li>Tap <strong>Generate token</strong>, copy it, and paste it below.</li>
+          <li>Scroll down, tap <strong>Generate token</strong>, copy the key, and paste it below.</li>
         </ol>
+        <p class="gh-help">Seeing "Page not found"? You're not signed in on this browser. Sign in first, then open the link again. Or go the long way: profile picture, <strong>Settings</strong>, <strong>Developer settings</strong>, <strong>Personal access tokens</strong>, <strong>Fine-grained tokens</strong>, <strong>Generate new token</strong>. In that case also set <strong>Contents</strong> to <strong>Read and write</strong> under Permissions.</p>
         <form class="gh-form" data-gh-form>
           <label>Access key
             <input type="password" data-gh-token autocomplete="off" spellcheck="false" placeholder="github_pat_..." required>
