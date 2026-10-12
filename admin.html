@@ -64,6 +64,15 @@
       </div>
     </section>
 
+    <section class="orders" aria-labelledby="orders-title">
+      <h2 id="orders-title">Orders</h2>
+      <label class="orders-field">WhatsApp number for orders
+        <input type="tel" data-whatsapp inputmode="tel" autocomplete="off" placeholder="e.g. +230 5123 4567">
+      </label>
+      <p class="orders-help">Include the country code. When a customer taps <strong>Order on WhatsApp</strong>, a chat opens with this number and their order already typed in. Leave it empty to take orders on Facebook Messenger instead.</p>
+      <p class="orders-help is-error" data-whatsapp-msg hidden></p>
+    </section>
+
     <section class="add" data-drop>
       <div class="add-copy">
         <h2>Add photos</h2>

@@ -15,3 +15,6 @@ window.DEVIS_GALLERY = [
   {"src":"images/11.jpg","caption":"Purple floral dress","price":"Rs1200","sizes":["L","XL","3XL"],"added":"2026-10-12"},
   {"src":"images/12.jpg","caption":"Coral floral tiered dress","price":"Rs1200","sizes":["XL","2XL","3XL"],"added":"2026-10-12"}
 ];
+
+// Shop settings, edited in admin.html.
+window.DEVIS_SETTINGS = {"whatsapp": "+61 402 524 344"};

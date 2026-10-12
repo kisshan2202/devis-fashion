@@ -12,9 +12,18 @@
   var SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   var FB_PAGE = "https://www.facebook.com/profile.php?id=100064059729236";
   var MESSENGER = "https://m.me/100064059729236";
+  var SETTINGS = window.DEVIS_SETTINGS || {};
+  var WA = String(SETTINGS.whatsapp || "").replace(/\D/g, "");
+  if (WA.length < 8) WA = "";
+  // No sizes ticked in the admin page means every size can be ordered.
   function sizesOf(p) {
     var list = Array.isArray(p.sizes) ? p.sizes : [];
-    return SIZES.filter(function (sz) { return list.indexOf(sz) >= 0; });
+    var picked = SIZES.filter(function (sz) { return list.indexOf(sz) >= 0; });
+    return picked.length ? picked : SIZES.slice();
+  }
+  function sizesLine(p) {
+    var sz = sizesOf(p);
+    return sz.length === SIZES.length ? "Sizes XS to 6XL" : "Sizes " + sz.join(", ");
   }
   function captionHTML(p) {
     var out = esc(p.caption || "");
@@ -84,8 +93,7 @@
     });
     var p = photos[active];
     capEl.innerHTML = captionHTML(p) || "&nbsp;";
-    var sz = sizesOf(p);
-    railSizes.textContent = sz.length ? "Sizes " + sz.join(", ") : "";
+    railSizes.textContent = sizesLine(p);
     countEl.textContent = (active + 1) + " of " + photos.length;
   }
 
@@ -327,6 +335,18 @@
   var orderBtn = document.querySelector("[data-order-btn]");
   var orderMsg = document.querySelector("[data-order-msg]");
   var MAX_QTY = 20;
+  orderBtn.textContent = WA ? "Order on WhatsApp" : "Order on Messenger";
+
+  // Header and footer order links follow the same choice.
+  if (WA) {
+    var hello = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Hello Devi's Fashion, I'd like to ask about a dress.");
+    document.querySelectorAll("[data-order-link]").forEach(function (a) {
+      a.href = hello;
+      if (a.dataset.waText) a.textContent = a.dataset.waText;
+    });
+    var waFoot = document.querySelector("[data-wa-footer]");
+    if (waFoot) waFoot.hidden = false;
+  }
   var order = { size: null, qty: 1, sizes: [] };
 
   function setupOrder(p) {
@@ -335,13 +355,9 @@
     order.qty = 1;
     orderMsg.textContent = "";
     orderMsg.classList.remove("is-error");
-    if (!order.sizes.length) {
-      sizePick.innerHTML = '<p class="size-ask">Sizes for this dress: message us and we\'ll tell you what\'s available.</p>';
-    } else {
-      sizePick.innerHTML = order.sizes.map(function (sz) {
-        return '<button type="button" class="size-btn" data-pick="' + sz + '" aria-pressed="' + (sz === order.size) + '">' + sz + "</button>";
-      }).join("");
-    }
+    sizePick.innerHTML = order.sizes.map(function (sz) {
+      return '<button type="button" class="size-btn" data-pick="' + sz + '" aria-pressed="' + (sz === order.size) + '">' + sz + "</button>";
+    }).join("");
     showQty();
   }
   function showQty() {
@@ -402,6 +418,14 @@
       return;
     }
     var text = orderText(p);
+    if (WA) {
+      var waUrl = "https://wa.me/" + WA + "?text=" + encodeURIComponent(text);
+      var w = window.open(waUrl, "_blank");
+      if (w) { try { w.opener = null; } catch (_) {} } else { location.href = waUrl; }
+      orderMsg.classList.remove("is-error");
+      orderMsg.textContent = "WhatsApp is opening with your order typed in. Tap send to place it.";
+      return;
+    }
     // Start the copy and open Messenger in the same tap, so phones allow both.
     var copied = copyText(text);
     var win = window.open(MESSENGER, "_blank");

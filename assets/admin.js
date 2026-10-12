@@ -7,6 +7,7 @@
   var uid = 0;
   // Sizes in the same order as the size chart.
   var SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
+  var NO_SIZES = "No sizes ticked: customers can pick any size from XS to 6XL.";
   function cleanSizes(list) {
     list = Array.isArray(list) ? list : [];
     return SIZES.filter(function (sz) { return list.indexOf(sz) >= 0; });
@@ -18,6 +19,8 @@
     });
   }
   var items = fromList(window.DEVIS_GALLERY);
+  var settings = { whatsapp: ((window.DEVIS_SETTINGS || {}).whatsapp || "") };
+  var settingsEdited = false;
   var removed = [];
   var changes = 0;
 
@@ -121,7 +124,7 @@
         }).join("") +
         '<button type="button" class="size-all" data-size-all>' + (all ? "Clear" : "All") + "</button>" +
       "</div>" +
-      (it.sizes.length ? "" : '<span class="sizes-none">No sizes ticked: customers will be asked to message you about sizes.</span>') +
+      (it.sizes.length ? "" : '<span class="sizes-none">' + NO_SIZES + "</span>") +
     "</div>";
   }
   function refreshSizes(li, it) {
@@ -135,7 +138,7 @@
     if (!it.sizes.length && !none) {
       var n = document.createElement("span");
       n.className = "sizes-none";
-      n.textContent = "No sizes ticked: customers will be asked to message you about sizes.";
+      n.textContent = NO_SIZES;
       li.querySelector(".sizes-edit").appendChild(n);
     }
   }
@@ -375,8 +378,28 @@
     return "// Devi's Fashion photo list.\n" +
       "// Edit it with admin.html (recommended) or by hand.\n" +
       "// The order here is the order on the home page: the first photo is shown first.\n" +
-      "window.DEVIS_GALLERY = [\n" + rows.join(",\n") + "\n];\n";
+      "window.DEVIS_GALLERY = [\n" + rows.join(",\n") + "\n];\n\n" +
+      "// Shop settings, edited in admin.html.\n" +
+      "window.DEVIS_SETTINGS = " + JSON.stringify({ whatsapp: settings.whatsapp.trim() }) + ";\n";
   }
+
+  /* ---------- Orders setting ---------- */
+  var waInput = document.querySelector("[data-whatsapp]");
+  var waMsg = document.querySelector("[data-whatsapp-msg]");
+  function showSettings() { waInput.value = settings.whatsapp; checkWhatsapp(); }
+  function checkWhatsapp() {
+    var v = settings.whatsapp.trim();
+    var digits = v.replace(/\D/g, "");
+    var bad = v && (digits.length < 8 || digits.length > 15 || /^0/.test(digits));
+    waMsg.hidden = !bad;
+    waMsg.textContent = bad ? "This doesn't look like a full number with country code. Start with + and the country code, e.g. +230 for Mauritius." : "";
+  }
+  waInput.addEventListener("input", function () {
+    settings.whatsapp = waInput.value;
+    if (!settingsEdited) { settingsEdited = true; changed(); }
+    checkWhatsapp();
+  });
+  showSettings();
 
   exportBtn.addEventListener("click", function () {
     if (typeof JSZip === "undefined") {
@@ -402,6 +425,7 @@
       a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
       changes = 0;
+      settingsEdited = false;
       items.forEach(function (it) { it._edited = null; if (it.isNew) it.exported = true; });
       updateStatus();
       statusEl.textContent = "Downloaded. Unzip it into your website folder, then upload the folder.";
@@ -491,10 +515,13 @@
   };
 
   function parseGallery(text) {
-    var start = text.indexOf("[");
-    var end = text.lastIndexOf("]");
-    if (start < 0 || end < start) throw new Error("parse");
-    return JSON.parse(text.slice(start, end + 1));
+    var m = /DEVIS_GALLERY\s*=\s*(\[[\s\S]*?\])\s*;/.exec(text);
+    if (!m) throw new Error("parse");
+    return JSON.parse(m[1]);
+  }
+  function parseSettings(text) {
+    var m = /DEVIS_SETTINGS\s*=\s*(\{[\s\S]*?\})\s*;/.exec(text);
+    try { return m ? JSON.parse(m[1]) : {}; } catch (_) { return {}; }
   }
 
   function explain(e) {
@@ -530,6 +557,8 @@
       if (changes === 0) {
         items = fromList(list);
         removed = [];
+        settings.whatsapp = parseSettings(text).whatsapp || "";
+        showSettings();
         render();
       }
       ghLoaded.textContent = "Showing the latest list from GitHub.";
@@ -642,6 +671,7 @@
       items.forEach(function (it) { it.isNew = false; it.blob = null; it.blobSha = null; it.exported = false; it._edited = null; });
       removed = [];
       changes = 0;
+      settingsEdited = false;
       busy = false;
       render();
       updateStatus();

@@ -17,8 +17,10 @@ Plain static pages: no build step, no server code.
 
 ## Ordering
 
-Customers pick a size and quantity in the dress view and tap **Order on Messenger**.
-The order details are copied, and Messenger opens on the Devi's Fashion page so they can paste and send.
+Customers pick a size and quantity in the dress view and tap **Order on WhatsApp**.
+A WhatsApp chat opens with the order already typed in. The number is set in the admin page under **Orders**
+(stored in `gallery.js` as `DEVIS_SETTINGS`). If it's left empty, the button falls back to Facebook Messenger.
+Dresses with no sizes ticked can be ordered in any size from XS to 6XL.
 
 ## Setting up publishing (once per phone or computer)
 
