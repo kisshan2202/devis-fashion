@@ -14,6 +14,7 @@
   --body: "Jost", "Segoe UI", sans-serif;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--body); padding-bottom: 96px; }
 button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -76,7 +77,7 @@ h1, h2 { font-family: var(--display); font-weight: 400; color: var(--green); }
 .handle { cursor: grab; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--muted); }
 .handle-pos { font-family: var(--display); font-size: 20px; color: var(--green); line-height: 1; }
 .handle svg { width: 18px; height: 18px; fill: currentColor; opacity: .55; }
-.thumb { width: 84px; height: 105px; border-radius: 42px 42px 4px 4px; overflow: hidden; background: var(--blush); }
+.thumb { width: 84px; height: 126px; border-radius: 42px 42px 4px 4px; overflow: hidden; background: var(--blush); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .fields { display: grid; grid-template-columns: 1fr 140px; gap: 8px; min-width: 0; }
 .fields label { display: flex; flex-direction: column; font-size: 13px; color: var(--muted); min-width: 0; }
@@ -121,7 +122,31 @@ h1, h2 { font-family: var(--display); font-weight: 400; color: var(--green); }
   .add-actions { align-items: stretch; }
   .item { grid-template-columns: 26px 64px 1fr; grid-template-areas: "h t f" "a a a"; }
   .handle { grid-area: h; }
-  .thumb { grid-area: t; width: 64px; height: 80px; }
+  .thumb { grid-area: t; width: 64px; height: 96px; }
   .fields { grid-area: f; grid-template-columns: 1fr; }
   .actions { grid-area: a; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 8px; }
 }
+
+/* ---------- GitHub publishing ---------- */
+.gh { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px; }
+.gh h2 { font-size: 22px; margin: 0 0 4px; }
+.gh > div > p { margin: 0 0 10px; color: var(--muted); }
+.gh-state { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.gh-state p { margin: 0; color: var(--ink); }
+.gh-state [data-gh-loaded] { color: var(--muted); }
+.gh .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3A8A5C; margin-right: 8px; vertical-align: middle; }
+.gh-steps { margin: 0 0 14px; padding-left: 1.3em; }
+.gh-steps li { margin-bottom: 4px; }
+.gh-steps a { color: var(--green); font-weight: 500; text-underline-offset: 3px; }
+.gh-form { display: grid; gap: 10px; max-width: 520px; }
+.gh-form label { display: flex; flex-direction: column; font-size: 13px; color: var(--muted); }
+.gh-form input { margin-top: 3px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); }
+.gh-form input:focus { border-color: var(--gold); background: #fff; outline: none; }
+.gh-form summary { cursor: pointer; font-size: 14px; color: var(--green); }
+.gh-adv { display: grid; gap: 8px; margin-top: 8px; }
+.gh-form .btn { justify-self: start; }
+.gh-msg { margin: 0; min-height: 1em; font-size: 14px; }
+.gh-msg:empty { display: none; }
+.is-error { color: var(--red); }
+.howto p { margin: 0 0 8px; }
+.howto .link-btn { font: inherit; }

@@ -26,6 +26,39 @@
       <p>The first photo here is the first one customers see. Drag photos to change the order, or use the arrows.</p>
     </section>
 
+    <section class="gh" data-gh aria-labelledby="gh-title">
+      <div class="gh-state" data-gh-connected hidden>
+        <p><span class="dot" aria-hidden="true"></span>Publishing to <strong data-gh-repo></strong>. <span data-gh-loaded></span></p>
+        <button type="button" class="link-btn" data-gh-disconnect>Disconnect</button>
+      </div>
+      <div data-gh-setup>
+        <h2 id="gh-title">Connect GitHub to publish</h2>
+        <p>Do this once on each phone or computer you use. The key is saved only on this device.</p>
+        <ol class="gh-steps">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub's new fine-grained token page</a> (sign in if asked).</li>
+          <li>Name it <em>Devi's Fashion admin</em> and pick an expiry date, for example one year.</li>
+          <li>Under <strong>Repository access</strong>, choose <strong>Only select repositories</strong> and pick <strong>date-guru</strong>.</li>
+          <li>Under <strong>Permissions</strong>, add <strong>Contents</strong> and set it to <strong>Read and write</strong>.</li>
+          <li>Tap <strong>Generate token</strong>, copy it, and paste it below.</li>
+        </ol>
+        <form class="gh-form" data-gh-form>
+          <label>Access key
+            <input type="password" data-gh-token autocomplete="off" spellcheck="false" placeholder="github_pat_..." required>
+          </label>
+          <details>
+            <summary>Repository settings</summary>
+            <div class="gh-adv">
+              <label>Repository<input type="text" data-gh-repo-input value="kisshan2202/date-guru" spellcheck="false"></label>
+              <label>Branch<input type="text" data-gh-branch value="main" spellcheck="false"></label>
+              <label>Site folder<input type="text" data-gh-folder value="public/devis-fashion" spellcheck="false"></label>
+            </div>
+          </details>
+          <button type="submit" class="btn btn-gold">Connect</button>
+          <p class="gh-msg" data-gh-msg role="status"></p>
+        </form>
+      </div>
+    </section>
+
     <section class="add" data-drop>
       <div class="add-copy">
         <h2>Add photos</h2>
@@ -62,19 +95,15 @@
     </section>
 
     <section class="howto" aria-labelledby="howto-title">
-      <h2 id="howto-title">Putting your changes on the site</h2>
-      <ol>
-        <li>Click <strong>Download update</strong>. You get a .zip file.</li>
-        <li>Unzip it into your website folder and replace the old files when asked.</li>
-        <li>Upload the website folder to your hosting as usual.</li>
-      </ol>
-      <p class="howto-note">Changes made here stay on this computer until you upload them, so nobody else can change your site from this page.</p>
+      <h2 id="howto-title">How publishing works</h2>
+      <p>Tapping <strong>Publish</strong> saves your photos and their order to GitHub. They appear on the site after your server redeploys.</p>
+      <p class="howto-note">Without the access key, nobody can change your site from this page. If you'd rather not use GitHub, <button type="button" class="link-btn" data-export>download the update as a .zip</button> and add it to the site folder yourself.</p>
     </section>
   </main>
 
   <div class="savebar" data-savebar>
     <p class="savebar-status" data-status>No changes yet.</p>
-    <button type="button" class="btn btn-gold" data-export>Download update</button>
+    <button type="button" class="btn btn-gold" data-publish>Publish</button>
   </div>
 
   <script src="assets/jszip.min.js"></script>

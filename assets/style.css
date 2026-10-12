@@ -7,7 +7,7 @@
   --paper: #FCF8F6;
   --ink: #22302C;
   --muted: #5E6B66;
-  --slide-w: min(400px, 70vw);
+  --slide-w: min(360px, 64vw);
   --display: "Gilda Display", "Didot", "Bodoni 72", Georgia, serif;
   --script: "Pinyon Script", "Snell Roundhand", cursive;
   --body: "Jost", "Avenir Next", "Segoe UI", sans-serif;
@@ -78,7 +78,7 @@ a { color: inherit; }
 
 .rail {
   position: relative;
-  height: calc(var(--slide-w) * 1.25);
+  height: calc(var(--slide-w) * 1.5);
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -88,7 +88,7 @@ a { color: inherit; }
   left: 50%;
   top: 0;
   width: var(--slide-w);
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   padding: 0;
   border: 0;
   background: var(--green-deep);
@@ -98,7 +98,7 @@ a { color: inherit; }
   transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .55s, box-shadow .55s;
   will-change: transform;
 }
-.slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.slide img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; pointer-events: none; }
 .slide.is-active {
   box-shadow: 0 0 0 1px var(--gold), 0 0 0 8px var(--green), 0 0 0 9px rgba(200,161,90,.45), 0 30px 60px -20px rgba(0,0,0,.6);
   cursor: zoom-in;
@@ -159,7 +159,7 @@ a { color: inherit; }
   cursor: zoom-in;
   position: relative;
 }
-.tile img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .5s ease; }
+.tile img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: center 30%; transition: transform .5s ease; }
 .tile:hover img { transform: scale(1.03); }
 .tile-cap {
   position: absolute; left: 0; right: 0; bottom: 0;
