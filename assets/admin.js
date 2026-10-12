@@ -377,7 +377,7 @@
   removedList.addEventListener("error", onImgError, true);
 
   /* ---------- GitHub publishing ---------- */
-  var KEY = "devis.github";
+  var KEY = "devis.github.standalone";
   var gh = {
     cfg: null,
     load: function () {
@@ -587,7 +587,7 @@
       busy = false;
       render();
       updateStatus();
-      statusEl.textContent = "Published. It shows on the site after your server redeploys.";
+      statusEl.textContent = "Published. It shows on the site once your hosting picks up the change.";
     }).catch(function (e) {
       busy = false;
       updateStatus();
