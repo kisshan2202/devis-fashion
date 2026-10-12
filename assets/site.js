@@ -9,6 +9,13 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
+  var SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
+  var FB_PAGE = "https://www.facebook.com/profile.php?id=100064059729236";
+  var MESSENGER = "https://m.me/100064059729236";
+  function sizesOf(p) {
+    var list = Array.isArray(p.sizes) ? p.sizes : [];
+    return SIZES.filter(function (sz) { return list.indexOf(sz) >= 0; });
+  }
   function captionHTML(p) {
     var out = esc(p.caption || "");
     if (p.price) out += '<span class="price">' + esc(p.price) + "</span>";
@@ -22,6 +29,7 @@
   var rail = document.querySelector("[data-rail]");
   var capEl = document.querySelector("[data-caption]");
   var countEl = document.querySelector("[data-count]");
+  var railSizes = document.querySelector("[data-rail-sizes]");
   var playBtn = document.querySelector("[data-play]");
   var prevBtn = document.querySelector("[data-prev]");
   var nextBtn = document.querySelector("[data-next]");
@@ -76,6 +84,8 @@
     });
     var p = photos[active];
     capEl.innerHTML = captionHTML(p) || "&nbsp;";
+    var sz = sizesOf(p);
+    railSizes.textContent = sz.length ? "Sizes " + sz.join(", ") : "";
     countEl.textContent = (active + 1) + " of " + photos.length;
   }
 
@@ -205,6 +215,7 @@
     img.alt = altText(p, lbIndex);
     lbCount.textContent = (lbIndex + 1) + " of " + n;
     lbCap.innerHTML = captionHTML(p);
+    setupOrder(p);
     lbPrev.hidden = lbNext.hidden = n < 2;
   }
   function openLightbox(i) {
@@ -234,6 +245,7 @@
 
   lb.addEventListener("keydown", function (e) {
     if (e.key === "Escape") { closeLightbox(); return; }
+    if (e.target.closest && e.target.closest("[data-order]") && (e.key === "ArrowLeft" || e.key === "ArrowRight")) return;
     if (e.key === "ArrowLeft" && scale === 1) showLb(lbIndex - 1);
     if (e.key === "ArrowRight" && scale === 1) showLb(lbIndex + 1);
     if (e.key === "+" || e.key === "=") zoomTo(scale * 1.5);
@@ -305,6 +317,127 @@
   stage.addEventListener("pointerup", endPointer);
   stage.addEventListener("pointercancel", endPointer);
   function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y) || 1; }
+
+
+  /* ================= Size, quantity and ordering ================= */
+  var sizePick = document.querySelector("[data-size-pick]");
+  var qtyEl = document.querySelector("[data-qty]");
+  var qtyMinus = document.querySelector("[data-qty-minus]");
+  var qtyPlus = document.querySelector("[data-qty-plus]");
+  var orderBtn = document.querySelector("[data-order-btn]");
+  var orderMsg = document.querySelector("[data-order-msg]");
+  var MAX_QTY = 20;
+  var order = { size: null, qty: 1, sizes: [] };
+
+  function setupOrder(p) {
+    order.sizes = sizesOf(p);
+    order.size = order.sizes.length === 1 ? order.sizes[0] : null;
+    order.qty = 1;
+    orderMsg.textContent = "";
+    orderMsg.classList.remove("is-error");
+    if (!order.sizes.length) {
+      sizePick.innerHTML = '<p class="size-ask">Sizes for this dress: message us and we\'ll tell you what\'s available.</p>';
+    } else {
+      sizePick.innerHTML = order.sizes.map(function (sz) {
+        return '<button type="button" class="size-btn" data-pick="' + sz + '" aria-pressed="' + (sz === order.size) + '">' + sz + "</button>";
+      }).join("");
+    }
+    showQty();
+  }
+  function showQty() {
+    qtyEl.textContent = order.qty;
+    qtyMinus.disabled = order.qty <= 1;
+    qtyPlus.disabled = order.qty >= MAX_QTY;
+  }
+  sizePick.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-pick]");
+    if (!b) return;
+    order.size = b.dataset.pick;
+    sizePick.querySelectorAll("[data-pick]").forEach(function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    if (orderMsg.classList.contains("is-error")) { orderMsg.textContent = ""; orderMsg.classList.remove("is-error"); }
+  });
+  qtyMinus.addEventListener("click", function () { if (order.qty > 1) { order.qty--; showQty(); } });
+  qtyPlus.addEventListener("click", function () { if (order.qty < MAX_QTY) { order.qty++; showQty(); } });
+
+  function photoUrl(p) {
+    try { return new URL(p.src, location.href).href; } catch (_) { return p.src; }
+  }
+  function orderText(p) {
+    var lines = ["Hello Devi's Fashion, I'd like to order:"];
+    lines.push("Dress: " + (p.caption || "Photo " + (lbIndex + 1)));
+    if (order.size) lines.push("Size: " + order.size);
+    else lines.push("Size: please tell me which sizes you have");
+    lines.push("Quantity: " + order.qty);
+    if (p.price) lines.push("Price: " + p.price + (order.qty > 1 ? " each" : ""));
+    lines.push("Photo: " + photoUrl(p));
+    return lines.join("\n");
+  }
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallbackCopy(text); });
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    lb.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (_) {}
+    ta.remove();
+    return ok;
+  }
+  orderBtn.addEventListener("click", function () {
+    var p = photos[lbIndex];
+    if (order.sizes.length && !order.size) {
+      orderMsg.classList.add("is-error");
+      orderMsg.textContent = "Choose a size first.";
+      var first = sizePick.querySelector("[data-pick]");
+      if (first) first.focus();
+      return;
+    }
+    var text = orderText(p);
+    // Start the copy and open Messenger in the same tap, so phones allow both.
+    var copied = copyText(text);
+    var win = window.open(MESSENGER, "_blank");
+    if (win) { try { win.opener = null; } catch (_) {} }
+    copied.then(function (ok) {
+      orderMsg.classList.remove("is-error");
+      orderMsg.textContent = ok
+        ? "Your order is copied. Paste it in the Messenger chat and send it."
+        : "Messenger is opening. Tell us the dress, size " + (order.size || "") + " and quantity " + order.qty + ".";
+    });
+    if (!win) copied.then(function () { location.href = MESSENGER; });
+  });
+
+  /* ================= Size chart ================= */
+  var chart = document.querySelector("[data-chart]");
+  var chartClose = chart.querySelector("[data-chart-close]");
+  var chartReturn = null;
+  function openChart(e) {
+    chartReturn = e && e.currentTarget ? e.currentTarget : document.activeElement;
+    paused = true; schedule();
+    chart.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    chartClose.focus();
+  }
+  function closeChart() {
+    chart.hidden = true;
+    if (lb.hidden) { document.documentElement.style.overflow = ""; paused = false; schedule(); }
+    if (chartReturn && chartReturn.focus) chartReturn.focus();
+  }
+  document.querySelectorAll("[data-chart-open]").forEach(function (b) { b.addEventListener("click", openChart); });
+  chartClose.addEventListener("click", closeChart);
+  chart.addEventListener("click", function (e) { if (e.target === chart) closeChart(); });
+  chart.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { e.stopPropagation(); closeChart(); }
+    if (e.key === "Tab") { e.preventDefault(); chartClose.focus(); }
+  });
 
   window.addEventListener("resize", function () { if (!lb.hidden) { clampPan(); apply(); } });
 })();

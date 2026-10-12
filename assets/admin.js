@@ -5,9 +5,16 @@
   var QUALITY = 0.85;      // JPEG quality for saved photos
 
   var uid = 0;
+  // Sizes in the same order as the size chart.
+  var SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
+  function cleanSizes(list) {
+    list = Array.isArray(list) ? list : [];
+    return SIZES.filter(function (sz) { return list.indexOf(sz) >= 0; });
+  }
+
   function fromList(arr) {
     return (arr || []).filter(function (p) { return p && p.src; }).map(function (p) {
-      return { id: ++uid, src: p.src, caption: p.caption || "", price: p.price || "", added: p.added || "", isNew: false };
+      return { id: ++uid, src: p.src, caption: p.caption || "", price: p.price || "", sizes: cleanSizes(p.sizes), added: p.added || "", isNew: false };
     });
   }
   var items = fromList(window.DEVIS_GALLERY);
@@ -77,6 +84,7 @@
         '<div class="fields">' +
           '<label>Caption<input type="text" data-field="caption" maxlength="80" placeholder="e.g. Floral maxi dress" value="' + esc(it.caption) + '"></label>' +
           '<label>Price<input type="text" data-field="price" maxlength="20" placeholder="e.g. Rs 1,200" value="' + esc(it.price) + '"></label>' +
+          sizesHTML(it, i) +
           '<div class="meta">' + (it.isNew ? '<span class="tag-new">New</span>' : "") +
             "<span>" + esc(fileName(it.src)) + "</span>" + (it.added ? "<span>Added " + esc(it.added) + "</span>" : "") +
           "</div>" +
@@ -102,6 +110,40 @@
     });
   }
 
+  function sizesHTML(it, i) {
+    var all = it.sizes.length === SIZES.length;
+    return '<div class="sizes-edit">' +
+      '<span class="sizes-label" id="sz-' + it.id + '">Sizes available</span>' +
+      '<div class="size-chips" role="group" aria-labelledby="sz-' + it.id + '">' +
+        SIZES.map(function (sz) {
+          var on = it.sizes.indexOf(sz) >= 0;
+          return '<button type="button" class="size-chip" data-size="' + sz + '" aria-pressed="' + on + '">' + sz + "</button>";
+        }).join("") +
+        '<button type="button" class="size-all" data-size-all>' + (all ? "Clear" : "All") + "</button>" +
+      "</div>" +
+      (it.sizes.length ? "" : '<span class="sizes-none">No sizes ticked: customers will be asked to message you about sizes.</span>') +
+    "</div>";
+  }
+  function refreshSizes(li, it) {
+    li.querySelectorAll("[data-size]").forEach(function (b) {
+      b.setAttribute("aria-pressed", it.sizes.indexOf(b.dataset.size) >= 0 ? "true" : "false");
+    });
+    var allBtn = li.querySelector("[data-size-all]");
+    allBtn.textContent = it.sizes.length === SIZES.length ? "Clear" : "All";
+    var none = li.querySelector(".sizes-none");
+    if (it.sizes.length && none) none.remove();
+    if (!it.sizes.length && !none) {
+      var n = document.createElement("span");
+      n.className = "sizes-none";
+      n.textContent = "No sizes ticked: customers will be asked to message you about sizes.";
+      li.querySelector(".sizes-edit").appendChild(n);
+    }
+  }
+  function markEdited(it, field) {
+    if (!it._edited) it._edited = {};
+    if (!it._edited[field]) { it._edited[field] = true; changed(); }
+  }
+
   function indexOfId(id) {
     id = Number(id);
     for (var i = 0; i < items.length; i++) if (items[i].id === id) return i;
@@ -122,6 +164,22 @@
 
   /* ---------- List actions ---------- */
   list.addEventListener("click", function (e) {
+    var chip = e.target.closest("[data-size], [data-size-all]");
+    if (chip) {
+      var row = chip.closest(".item");
+      var item = items[indexOfId(row.dataset.id)];
+      if (chip.hasAttribute("data-size-all")) {
+        item.sizes = item.sizes.length === SIZES.length ? [] : SIZES.slice();
+      } else {
+        var sz = chip.dataset.size;
+        var k = item.sizes.indexOf(sz);
+        if (k >= 0) item.sizes.splice(k, 1); else item.sizes.push(sz);
+        item.sizes = cleanSizes(item.sizes);
+      }
+      markEdited(item, "sizes");
+      refreshSizes(row, item);
+      return;
+    }
     var btn = e.target.closest("[data-act]");
     if (!btn) return;
     var li = btn.closest(".item");
@@ -269,7 +327,7 @@
         return resize(f).then(function (blob) {
           var name = newName();
           added.push({
-            id: ++uid, src: "images/" + name, caption: "", price: "", added: today(),
+            id: ++uid, src: "images/" + name, caption: "", price: "", sizes: [], added: today(),
             isNew: true, blob: blob, previewUrl: URL.createObjectURL(blob)
           });
         }).catch(function () { failed.push(f.name); });
@@ -312,7 +370,7 @@
   /* ---------- Export ---------- */
   function galleryJs() {
     var rows = items.map(function (it) {
-      return "  " + JSON.stringify({ src: it.src, caption: it.caption.trim(), price: it.price.trim(), added: it.added });
+      return "  " + JSON.stringify({ src: it.src, caption: it.caption.trim(), price: it.price.trim(), sizes: cleanSizes(it.sizes), added: it.added });
     });
     return "// Devi's Fashion photo list.\n" +
       "// Edit it with admin.html (recommended) or by hand.\n" +

@@ -151,3 +151,17 @@ h1, h2 { font-family: var(--display); font-weight: 400; color: var(--green); }
 .howto p { margin: 0 0 8px; }
 .howto .link-btn { font: inherit; }
 .gh-help { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
+
+/* ---------- Sizes ---------- */
+.sizes-edit { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 4px; }
+.sizes-label { font-size: 13px; color: var(--muted); }
+.size-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.size-chip, .size-all {
+  min-width: 42px; height: 34px; padding: 0 10px;
+  border-radius: 999px; border: 1px solid var(--line); background: #fff;
+  font-size: 14px; cursor: pointer; color: var(--ink);
+}
+.size-chip:hover { border-color: var(--gold); }
+.size-chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--gold-soft); }
+.size-all { border-style: dashed; color: var(--green); }
+.sizes-none { font-size: 13px; color: var(--muted); font-style: italic; }

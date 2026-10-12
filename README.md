@@ -6,13 +6,19 @@ Plain static pages: no build step, no server code.
 | Page | What it's for |
 | --- | --- |
 | `index.html` | The shop: latest-arrivals carousel, all dresses, tap-to-zoom photos |
-| `admin.html` | Photo manager: add, delete, reorder, caption and price photos, then **Publish** |
+| `admin.html` | Photo manager: add, delete, reorder, caption, price and set sizes for each dress, then **Publish** |
 
 ## How photos are stored
 
-- `gallery.js` lists the photos in carousel order, with caption and price.
+- `gallery.js` lists the photos in carousel order, with caption, price and available sizes.
+- `images/size-chart.jpg` is the size chart customers open from the shop.
 - `images/` holds the photos.
 - The admin page edits both and saves them to this repository through GitHub, using a fine-grained access key that is kept only on the device that uses it.
+
+## Ordering
+
+Customers pick a size and quantity in the dress view and tap **Order on Messenger**.
+The order details are copied, and Messenger opens on the Devi's Fashion page so they can paste and send.
 
 ## Setting up publishing (once per phone or computer)
 

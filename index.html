@@ -43,19 +43,23 @@
         </button>
         <div class="rail-meta" aria-live="polite">
           <p class="rail-caption" data-caption></p>
+          <p class="rail-sizes" data-rail-sizes></p>
           <p class="rail-count" data-count></p>
         </div>
         <button class="rail-btn" type="button" data-next aria-label="Next dress">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
         </button>
-        <button class="rail-play" type="button" data-play aria-pressed="true">Pause</button>
+        <div class="rail-links">
+          <button class="rail-link" type="button" data-chart-open>Size chart</button>
+          <button class="rail-link" type="button" data-play aria-pressed="true">Pause slideshow</button>
+        </div>
       </div>
     </section>
 
     <section class="collection" id="all" aria-labelledby="all-title">
       <div class="collection-head">
         <h2 id="all-title">All dresses</h2>
-        <p>Sizes XS to 4XL. Message us with the dress and your size, and we'll confirm price and delivery.</p>
+        <p>Sizes XS to 6XL. Tap a dress to choose your size and quantity, then send us your order on Messenger. Not sure of your size? <button type="button" class="inline-link" data-chart-open>See the size chart</button>.</p>
       </div>
       <div class="grid" data-grid></div>
     </section>
@@ -99,6 +103,42 @@
     <div class="lb-bottom">
       <p class="lb-caption" data-lb-caption></p>
       <p class="lb-hint">Tap the photo to zoom. Drag to look around.</p>
+      <div class="order" data-order>
+        <div class="order-row">
+          <div class="order-label-row">
+            <span class="order-label" id="size-label">Size</span>
+            <button type="button" class="inline-link" data-chart-open>Size chart</button>
+          </div>
+          <div class="size-pick" role="group" aria-labelledby="size-label" data-size-pick></div>
+        </div>
+        <div class="order-row order-row-inline">
+          <span class="order-label" id="qty-label">Quantity</span>
+          <div class="qty" role="group" aria-labelledby="qty-label">
+            <button type="button" class="qty-btn" data-qty-minus aria-label="One fewer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>
+            </button>
+            <output class="qty-val" data-qty aria-live="polite">1</output>
+            <button type="button" class="qty-btn" data-qty-plus aria-label="One more">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="order-btn" data-order-btn>Order on Messenger</button>
+        <p class="order-msg" data-order-msg role="status"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart" data-chart role="dialog" aria-modal="true" aria-label="Size chart" hidden>
+    <div class="chart-top">
+      <p class="chart-title">Size chart</p>
+      <button type="button" class="lb-btn" data-chart-close aria-label="Close size chart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="chart-body">
+      <img src="images/size-chart.jpg" alt="Size chart. Bust, waist and hips for each size. XS: bust 84 cm, waist 65 cm, hips 90 cm. S: 88, 70, 94. M: 92, 74, 98. L: 97, 78, 104. XL: 102, 83, 110. 2XL: 108, 89, 116. 3XL: 114, 94, 122. 4XL: 120, 100, 128. 5XL: 126, 106, 134. 6XL: 132, 112, 140." loading="lazy">
+      <p class="chart-note">Measure your bust, waist and hips, then pick the size where all three fit. Between sizes? Choose the bigger one, or ask us.</p>
     </div>
   </div>
 
