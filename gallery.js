@@ -17,4 +17,4 @@ window.DEVIS_GALLERY = [
 ];
 
 // Shop settings, edited in admin.html.
-window.DEVIS_SETTINGS = {"whatsapp": "+61 402 524 344"};
+window.DEVIS_SETTINGS = {"whatsapp":"+61 402 524 344"};
