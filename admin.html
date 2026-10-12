@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Photo manager | Devi's Fashion</title>
+  <meta name="theme-color" content="#17342F">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-brand">
+      <span class="script">Devi's</span>
+      <span class="bar-title">Photo manager</span>
+    </div>
+    <a class="bar-link" href="index.html" target="_blank" rel="noopener">View site</a>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1>Carousel photos</h1>
+      <p>The first photo here is the first one customers see. Drag photos to change the order, or use the arrows.</p>
+    </section>
+
+    <section class="add" data-drop>
+      <div class="add-copy">
+        <h2>Add photos</h2>
+        <p>Choose photos from your phone or computer, or drop them here. Large photos are resized so the site stays fast.</p>
+      </div>
+      <div class="add-actions">
+        <label class="btn btn-gold">
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple data-file hidden>
+          Choose photos
+        </label>
+        <label class="where">
+          New photos go
+          <select data-where>
+            <option value="start">first (newest first)</option>
+            <option value="end">last</option>
+          </select>
+        </label>
+      </div>
+      <p class="add-msg" data-add-msg role="status"></p>
+    </section>
+
+    <section aria-labelledby="list-title">
+      <div class="list-head">
+        <h2 id="list-title">In the carousel <span class="pill" data-total></span></h2>
+      </div>
+      <ol class="list" data-list></ol>
+      <p class="empty" data-empty hidden>No photos in the carousel. Add some above.</p>
+    </section>
+
+    <section class="removed" data-removed-wrap hidden aria-labelledby="removed-title">
+      <h2 id="removed-title">Deleted</h2>
+      <p>These photos won't show on the site after you publish. You can bring them back until then.</p>
+      <ul class="removed-list" data-removed></ul>
+    </section>
+
+    <section class="howto" aria-labelledby="howto-title">
+      <h2 id="howto-title">Putting your changes on the site</h2>
+      <ol>
+        <li>Click <strong>Download update</strong>. You get a .zip file.</li>
+        <li>Unzip it into your website folder and replace the old files when asked.</li>
+        <li>Upload the website folder to your hosting as usual.</li>
+      </ol>
+      <p class="howto-note">Changes made here stay on this computer until you upload them, so nobody else can change your site from this page.</p>
+    </section>
+  </main>
+
+  <div class="savebar" data-savebar>
+    <p class="savebar-status" data-status>No changes yet.</p>
+    <button type="button" class="btn btn-gold" data-export>Download update</button>
+  </div>
+
+  <script src="assets/jszip.min.js"></script>
+  <script src="gallery.js"></script>
+  <script src="assets/admin.js"></script>
+</body>
+</html>

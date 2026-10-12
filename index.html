@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Devi's Fashion | Dresses in Flacq, Mauritius</title>
+  <meta name="description" content="Devi's Fashion – women's dresses from Flacq, Mauritius. See our latest arrivals and message us on Facebook to order.">
+  <meta name="theme-color" content="#17342F">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#all">Skip to all dresses</a>
+
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Devi's Fashion home">
+      <span class="wordmark-script">Devi's</span>
+      <span class="wordmark-sub">Fashion</span>
+    </a>
+    <p class="masthead-tag">Be in fashion</p>
+    <a class="masthead-cta" href="https://www.facebook.com/profile.php?id=100064059729236" target="_blank" rel="noopener">Order on Facebook</a>
+  </header>
+
+  <main>
+    <section class="showcase" aria-roledescription="carousel" aria-label="Latest arrivals">
+      <div class="showcase-head">
+        <h1>Latest arrivals</h1>
+        <p class="showcase-note">Tap a dress to see it up close.</p>
+      </div>
+
+      <div class="rail" data-rail></div>
+
+      <div class="rail-bar">
+        <button class="rail-btn" type="button" data-prev aria-label="Previous dress">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="rail-meta" aria-live="polite">
+          <p class="rail-caption" data-caption></p>
+          <p class="rail-count" data-count></p>
+        </div>
+        <button class="rail-btn" type="button" data-next aria-label="Next dress">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button class="rail-play" type="button" data-play aria-pressed="true">Pause</button>
+      </div>
+    </section>
+
+    <section class="collection" id="all" aria-labelledby="all-title">
+      <div class="collection-head">
+        <h2 id="all-title">All dresses</h2>
+        <p>Sizes XS to 4XL. Message us with the dress and your size, and we'll confirm price and delivery.</p>
+      </div>
+      <div class="grid" data-grid></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <span class="wordmark-script">Devi's</span>
+      <span class="wordmark-sub">Fashion</span>
+    </div>
+    <div class="footer-info">
+      <p>Women's clothes shop in Flacq, Mauritius.</p>
+      <p><a href="https://www.facebook.com/profile.php?id=100064059729236" target="_blank" rel="noopener">Message us on Facebook</a> to order or ask about sizes.</p>
+    </div>
+  </footer>
+
+  <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="Dress photo" hidden>
+    <div class="lb-top">
+      <p class="lb-count" data-lb-count></p>
+      <div class="lb-tools">
+        <button type="button" class="lb-btn" data-zoom-out aria-label="Zoom out">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <button type="button" class="lb-btn" data-zoom-in aria-label="Zoom in">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>
+        </button>
+        <button type="button" class="lb-btn" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="lb-stage" data-stage>
+      <img class="lb-img" data-lb-img alt="" draggable="false">
+    </div>
+    <button type="button" class="lb-btn lb-nav lb-prev" data-lb-prev aria-label="Previous photo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button type="button" class="lb-btn lb-nav lb-next" data-lb-next aria-label="Next photo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="lb-bottom">
+      <p class="lb-caption" data-lb-caption></p>
+      <p class="lb-hint">Tap the photo to zoom. Drag to look around.</p>
+    </div>
+  </div>
+
+  <script src="gallery.js"></script>
+  <script src="assets/site.js"></script>
+</body>
+</html>
