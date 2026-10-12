@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=20261013b">
 </head>
 <body>
   <a class="skip" href="#all">Skip to all dresses</a>
@@ -142,7 +142,19 @@
     </div>
   </div>
 
-  <script src="gallery.js"></script>
-  <script src="assets/site.js"></script>
+  <script>
+    // Always load the newest photo list and scripts, so changes show as soon as GitHub Pages updates.
+    (function () {
+      var v = Date.now();
+      var files = ["gallery.js", "assets/site.js"];
+      (function next(i) {
+        if (i >= files.length) return;
+        var s = document.createElement("script");
+        s.src = files[i] + "?v=" + v;
+        s.onload = function () { next(i + 1); };
+        document.body.appendChild(s);
+      })(0);
+    })();
+  </script>
 </body>
 </html>
